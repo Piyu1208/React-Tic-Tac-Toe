@@ -5,16 +5,20 @@
   border: solid 1px;
 }
 
+.row {
+  display: flex;
+  justify-content: center;
+  width: 210px;
+}
+
 .status {
   margin: 30px;
   text-align: center;
 }
 
 .grid {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   height: 210px;
   width: 210px;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: auto auto auto;
-  gap: 0;
 }
