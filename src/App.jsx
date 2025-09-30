@@ -14,11 +14,10 @@ function Button({value, onButtonClick}) {
   );
 }
 
-export default function App() {
-  const [values, setValues] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
+function Grid({xIsNext, handlePlay, values}) {
 
-  function handleClick(i) {
+
+ function handleClick(i) {
     if(values[i] || detectWinner(values)) {
       return;
     }
@@ -30,10 +29,10 @@ export default function App() {
       else {
         newValues[i] = "O";
       }
-      setXIsNext(!xIsNext);
-      setValues(newValues);
+      
+      handlePlay(newValues);
     }
-  }
+  } 
 
   let status;
 
@@ -56,6 +55,7 @@ export default function App() {
 
   return (
     <>
+    <div class="board">
       <div className="status">{status}</div>
       <div className="grid">
         <div className="row">
@@ -74,14 +74,59 @@ export default function App() {
           <Button value={values[8]} onButtonClick={() => handleClick(8)} />
         </div>
       </div>
+    </div>
+
 
     
     </>
   );
 
+}
 
 
 
+export default function App() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentValues = history[history.length - 1]
+
+  
+  function handlePlay(nxtHistory) {
+    setXIsNext(!xIsNext);
+    setHistory([...history, nxtHistory]);
+  }
+
+  const moves = history.map((hist, move) => {
+    let description;
+
+    if(move > 0) {
+      description = "Go to #" + move + " move";
+    }
+    else {
+      description = "Go to Game start";
+    }
+
+    return (
+      <li>
+        <button>{description}</button>
+      </li>
+    );
+  })
+
+
+  return (
+    <>
+    <div className="container">
+      <Grid xIsNext={xIsNext} handlePlay={handlePlay} values={currentValues} />
+      <div className="game-info">
+        <ol>
+          {moves}
+        </ol>
+      </div>
+    </div>
+
+    </>
+  );
 }
 
 function detectWinner(values) {

@@ -22,3 +22,18 @@
   height: 210px;
   width: 210px;
 }
+
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.game-info {
+  margin-left: 80px;
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+
+}
