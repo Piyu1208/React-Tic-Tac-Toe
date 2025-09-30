@@ -5,10 +5,10 @@ import './App.css'
 
 
 
-function Button({value, handleClick}) {
+function Button({value, onButtonClick}) {
   
   return (
-    <button className="square" onClick={handleClick}>
+    <button className="square" onClick={onButtonClick}>
       {value}
     </button>
   );
@@ -16,32 +16,89 @@ function Button({value, handleClick}) {
 
 export default function App() {
   const [values, setValues] = useState(Array(9).fill(null));
+  const [xIsNext, setXIsNext] = useState(true);
 
   function handleClick(i) {
-    const newValues = values.slice();
-    newValues[i] = "X";
-    setValues(newValues);
+    if(values[i] || detectWinner(values)) {
+      return;
+    }
+    else {
+      const newValues = values.slice();
+      if(xIsNext) {
+        newValues[i] = "X";
+      } 
+      else {
+        newValues[i] = "O";
+      }
+      setXIsNext(!xIsNext);
+      setValues(newValues);
+    }
   }
+
+  let status;
+
+  const winner = detectWinner(values);
+
+  if(winner) {
+    status = "Winner: " + winner; 
+  }
+  else {
+    status = "Next turn: " + (xIsNext ? "X" : "O");
+  }
+
+
 
 
   return (
     <>
-      <div className="row">
-        <Button value={values[0]} onClick={() => handleClick(0)} />
-        <Button value={values[1]} onClick={() => handleClick(1)} />
-        <Button value={values[2]} onClick={() => handleClick(2)} />
+      <div className="status">{status}</div>
+      <div className="grid">
+        <div className="row">
+          <Button value={values[0]} onButtonClick={() => handleClick(0)} />
+          <Button value={values[1]} onButtonClick={() => handleClick(1)} />
+          <Button value={values[2]} onButtonClick={() => handleClick(2)} />
+        </div>
+        <div className="row">
+          <Button value={values[3]} onButtonClick={() => handleClick(3)} />
+          <Button value={values[4]} onButtonClick={() => handleClick(4)} />
+          <Button value={values[5]} onButtonClick={() => handleClick(5)} />
+        </div>
+        <div className="row">
+          <Button value={values[6]} onButtonClick={() => handleClick(6)} />
+          <Button value={values[7]} onButtonClick={() => handleClick(7)} />
+          <Button value={values[8]} onButtonClick={() => handleClick(8)} />
+        </div>
       </div>
-      <div className="row">
-        <Button value={values[3]} onClick={() => handleClick(3)} />
-        <Button value={values[4]} onClick={() => handleClick(4)} />
-        <Button value={values[5]} onClick={() => handleClick(5)} />
-      </div>
-      <div className="row">
-        <Button value={values[6]} onClick={() => handleClick(6)} />
-        <Button value={values[7]} onClick={() => handleClick(7)} />
-        <Button value={values[8]} onClick={() => handleClick(8)} />
-      </div>
+
     
     </>
   );
+
+
+
+
 }
+
+function detectWinner(values) {
+  const wins = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+  ];
+
+  for(let i=0; i<wins.length; i++) {
+    const [a, b, c] = wins[i];
+
+    if(values[a] && values[a] === values[b] && values[a] === values[c]) {
+      return values[a];
+    }
+  }
+  return null;
+}
+
+

@@ -5,3 +5,16 @@
   border: solid 1px;
 }
 
+.status {
+  margin: 30px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  height: 210px;
+  width: 210px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 0;
+}
