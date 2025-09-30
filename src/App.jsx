@@ -39,8 +39,13 @@ export default function App() {
 
   const winner = detectWinner(values);
 
+  const draw = detectDraw(values);
+
   if(winner) {
     status = "Winner: " + winner; 
+  }
+  else if(draw) {
+    status = "Draw";
   }
   else {
     status = "Next turn: " + (xIsNext ? "X" : "O");
@@ -99,6 +104,16 @@ function detectWinner(values) {
     }
   }
   return null;
+}
+
+
+function detectDraw(values) {
+  for(let i=0; i<values.length; i++) {
+    if(values[i] === null) {
+      return false;
+    }
+  }
+  return true;
 }
 
 
