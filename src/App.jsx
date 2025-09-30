@@ -86,14 +86,20 @@ function Grid({xIsNext, handlePlay, values}) {
 
 
 export default function App() {
-  const [xIsNext, setXIsNext] = useState(true);
   const [history, setHistory] = useState([Array(9).fill(null)]);
-  const currentValues = history[history.length - 1]
+  const [currentMove, setCurrentMove] = useState(0);
+  const xIsNext = currentMove % 2 === 0;
+  const currentValues = history[currentMove];
 
   
-  function handlePlay(nxtHistory) {
-    setXIsNext(!xIsNext);
-    setHistory([...history, nxtHistory]);
+  function handlePlay(nxtValues) {
+    const nxtHistory = [...history.slice(0, currentMove + 1), nxtValues];
+    setHistory(nxtHistory);
+    setCurrentMove(nxtHistory.length - 1);
+  }
+
+  function jumpTo(nextMove) {
+    setCurrentMove(nextMove);
   }
 
   const moves = history.map((hist, move) => {
@@ -107,8 +113,10 @@ export default function App() {
     }
 
     return (
-      <li>
-        <button>{description}</button>
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>
+          {description}
+        </button>
       </li>
     );
   })
